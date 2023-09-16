@@ -3,7 +3,7 @@ kind: Config
 metadata:
   name: proxy
 deploy:
-  kubectl:
-    manifests:
-    - deployment.yaml
-    - service.yaml
+  helm:
+    releases:
+      - name: proxy
+        chartPath: ../lib/proxy

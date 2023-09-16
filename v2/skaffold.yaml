@@ -2,12 +2,36 @@ apiVersion: skaffold/v4beta6
 kind: Config
 metadata:
   name: app
+build:
+  artifacts:
+    - image: view-app
+      context: ../lib/app
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
+  local:
+    useBuildkit: true
+    push: false
 deploy:
   helm:
     releases:
+      - name: view-app
+        chartPath: ../lib/app/helm
+        setValueTemplates:
+          image: "{{ .IMAGE_FULLY_QUALIFIED_view_app }}"
+      - name: proxy
+        chartPath: ../lib/proxy
       - name: mock
         chartPath: ../lib/wiremock
-        version: 0.1.0
         setValues:
           name: mock-api
           port: 13000
+profiles:
+  - name: app-only
+    patches:
+      - op: remove
+        path: /deploy/helm/releases/2
+      - op: remove
+        path: /deploy/helm/releases/1
