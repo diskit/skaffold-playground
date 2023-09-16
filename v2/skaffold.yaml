@@ -1,12 +1,13 @@
-apiVersion: skaffold/v2beta29
+apiVersion: skaffold/v4beta6
 kind: Config
 metadata:
-  name: mock-api
+  name: app
 deploy:
   helm:
     releases:
-      - name: mock-api
+      - name: mock
         chartPath: ../lib/wiremock
+        version: 0.1.0
         setValues:
           name: mock-api
           port: 13000

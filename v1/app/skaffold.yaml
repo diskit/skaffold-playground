@@ -1,0 +1,23 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: view
+build:
+  artifacts:
+    - image: view-app
+      context: ../../app/src
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
+  local:
+    useBuildkit: true
+    push: false
+deploy:
+  helm:
+    releases:
+      - name: view-app
+        chartPath: ../../app/helm
+        artifactOverrides:
+          image: view-app
