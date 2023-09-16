@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: proxy
+  name: proxy
+spec:
+  ports:
+  - name: 12000-80
+    port: 12000
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: proxy
+  type: ClusterIP
+status:
+  loadBalancer: {}
