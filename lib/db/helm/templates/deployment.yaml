@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: datastore
+  name: datastore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datastore
+  template:
+    metadata:
+      labels:
+        app: datastore
+    spec:
+      containers:
+      - image: {{ .Values.image }}
+        name: datastore
+        ports:
+          - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: postgres

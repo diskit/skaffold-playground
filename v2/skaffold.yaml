@@ -8,6 +8,10 @@ build:
       context: ../lib/app
       docker:
         dockerfile: Dockerfile
+    - image: datastore
+      context: ../lib/db
+      docker:
+        dockerfile: Dockerfile
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
@@ -21,6 +25,10 @@ deploy:
         chartPath: ../lib/app/helm
         setValueTemplates:
           image: "{{ .IMAGE_FULLY_QUALIFIED_view_app }}"
+      - name: datastore
+        chartPath: ../lib/db/helm
+        setValueTemplates:
+          image: '{{.IMAGE_FULLY_QUALIFIED_datastore}}'
       - name: proxy
         chartPath: ../lib/proxy
       - name: mock
@@ -31,6 +39,8 @@ deploy:
 profiles:
   - name: app-only
     patches:
+      - op: remove
+        path: /deploy/helm/releases/3
       - op: remove
         path: /deploy/helm/releases/2
       - op: remove

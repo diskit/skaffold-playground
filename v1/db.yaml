@@ -1,0 +1,23 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: datastore
+build:
+  artifacts:
+    - image: datastore
+      context: ../lib/db
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
+  local:
+    useBuildkit: true
+    push: false
+deploy:
+  helm:
+    releases:
+      - name: datastore
+        chartPath: ../lib/db/helm
+        artifactOverrides:
+          image: datastore

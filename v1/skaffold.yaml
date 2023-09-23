@@ -2,5 +2,6 @@ apiVersion: skaffold/v2beta29
 kind: Config
 requires:
   - path: proxy.yaml
+  - path: db.yaml
   - path: app.yaml
   - path: mock.yaml
