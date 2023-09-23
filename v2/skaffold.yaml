@@ -16,15 +16,15 @@ build:
     gitCommit:
       variant: AbbrevCommitSha
   local:
-    useBuildkit: true
     push: false
+    useBuildkit: true
 deploy:
   helm:
     releases:
       - name: view-app
         chartPath: ../lib/app/helm
         setValueTemplates:
-          image: "{{ .IMAGE_FULLY_QUALIFIED_view_app }}"
+          image: '{{ .IMAGE_FULLY_QUALIFIED_view_app }}'
       - name: datastore
         chartPath: ../lib/db/helm
         setValueTemplates:
@@ -35,8 +35,16 @@ deploy:
         chartPath: ../lib/wiremock
         setValues:
           name: mock-api
-          port: 13000
+          port: "13000"
 profiles:
+  - name: deps-only
+    activation:
+      - command: dev
+    patches:
+      - op: remove
+        path: /deploy/helm/releases/0
+      - op: remove
+        path: /build/artifacts/0
   - name: app-only
     patches:
       - op: remove
